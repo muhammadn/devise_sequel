@@ -1,5 +1,3 @@
-require 'rake'
-
 Gem::Specification.new do |s|
   s.name = "devise_sequel"
   s.version = '0.0.3'
@@ -15,9 +13,7 @@ Gem::Specification.new do |s|
 
   s.files = `git ls-files`.split("\n")
   s.require_paths = ["lib"]
-  s.has_rdoc = false
 
   s.add_dependency "orm_adapter-sequel"
   s.add_dependency "devise", '>= 1.2.rc'
-  s.add_dependency "sequel"
 end
