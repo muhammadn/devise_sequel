@@ -24,16 +24,14 @@ There are no generators at this point, but it's pretty easy to get started:
 I like to extend only the models I need for Devise:
 
     class User < Sequel::Model
-      extend Devise::Models
-      extend Devise::Orm::Sequel::Hook
-
-      # usually active_model is included already in any Sequel Rails 3 connectors
-      # plugin :active_model
+      plugin :devise
 
       devise ... # put the devise modules you want here
     end
 
-But if you want them to be globally available for all your Sequel models, then uncomment the lines at the bottom of the sequel.rb file in the plugin. Hopefully this can be more elegant in the future where you can set an option somewhere.
+But if you want them to be globally available for all your Sequel models, load the plugin before model loading:
+
+    Sequel::Model.plugin :devise
 
 For schema migration, you can do something like this:
 

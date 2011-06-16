@@ -1,46 +1,35 @@
-require 'devise/orm/sequel/schema'
-require 'devise/orm/sequel/compatibility'
+require 'devise_sequel'
+require 'devise/schema'
 
 module Devise
   module Orm
     module Sequel
-      module Hook
-        def devise_modules_hook!
-          extend Schema
-          include Compatibility
-          include ActiveModel::Validations
+      module Schema
+        include Devise::Schema
 
-          # obviously this doesn't work yet
-          def self.validates_uniqueness_of(*fields)
+        SCHEMA_OPTIONS = { 
+          :limit => :size
+          # there's also precision and scale
+        }
+
+        def apply_devise_schema(name, type, options={})
+          SCHEMA_OPTIONS.each do |old_key, new_key|
+            next unless options.key?(old_key)
+            options[new_key] = options.delete(old_key)
           end
 
-          yield
+          cname = name.to_s.to_sym
+          if cname == :email then
+            # special case for "authenticable" method to also add 
+            # auto incrementing id, since sequel doesn't do this automatically
+            primary_key(:id)
+          end
+
+          column(cname, type, options)
         end
       end
     end
   end
 end
 
-# this is an issue with anonymous classes being selected too, which #name returns nil
-# raises lots of errors with Sequel. suggested fix from
-# https://rails.lighthouseapp.com/projects/8994/tickets/5252-activemodel-naming-should-take-care-of-anonymous-classes
-module ActiveModel
-  module Translation
-    def lookup_ancestors
-      self.ancestors.select { |x| not x.anonymous? and x.respond_to?(:model_name) }
-    end
-  end
-end
-
-if defined?(Sequel) then
-    # extend Sequel Model
-    # uncomment the following lines to have ALL sequel models compatible with Devise
-
-    # Sequel::Model.extend(Devise::Models)
-    # Sequel::Model.extend(Devise::Orm::Sequel::Hook)
-    # Sequel::Model.plugin :active_model
-    # Sequel::Model.plugin :validation_class_methods
-
-    # probably just need the apply_schema method
-    Sequel::Schema::Generator.send(:include, Devise::Orm::Sequel::Schema)
-end
+Sequel::Schema::Generator.send(:include, Devise::Orm::Sequel::Schema)
