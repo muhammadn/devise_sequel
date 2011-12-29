@@ -2,7 +2,7 @@ Gem::Specification.new do |s|
   s.name = "devise_sequel"
   s.version = '0.0.3'
   s.platform = Gem::Platform::RUBY
-  s.authors = ["Rachot Moragraan"]
+  s.authors = ["Rachot Moragraan", "Michael Hayden"]
   s.description = "Sequel support for Devise"
   s.summary = "Sequel support for Devise"
   s.email = "janechii@gmail.com"

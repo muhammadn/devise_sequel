@@ -57,11 +57,22 @@ For schema migration, you can do something like this:
 
 Very similar to the devise active record example. "database_authenticatable" creates an autoincrementing primary key "id" field for you.
 
+Notes on mehayden fork
+======================
+
+Motivation was to get Devise 1.5.2 with UTC time fixes working with Sequel 3.30.0. I had tried the original mooman gem which was giving stack overflows because Devise 1.5.2 calls before_validation twice. I also tried the arthurdandrea fork which did not seem work correctly with the callbacks that Devise uses.
+
+The solution provided in this version extends the Devise user models with ActiveModel::Callbacks.
+Wrapper methods for the Sequel :save, :update and :validate methods are included into the model which call the necessary ActiveModel "run_callbacks" on the :create, :update and :validation callback types used by Devise 1.5.2.
+
+The design allows one to redefine :save, :update or :validate in the model class as long as "super" is called appropriately. These are redefined to call the wrapper methods which are then reincluded.
+
 Credits / Contributors
 ======================
 
 Rachot Moragraan       
 Daniel Lyons      
+Michael Hayden
 
 A lot of testing designs are from dm-devise.
 

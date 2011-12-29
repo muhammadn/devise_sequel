@@ -15,5 +15,5 @@ gem 'sequel-rails'
 
 gem "warden", "~> 1.0.3"
 gem "orm_adapter", "~> 0.0.3"
-gem "orm_adapter-sequel", :path => '/home/mooman/git/orm_adapter-sequel'
+gem "orm_adapter-sequel", "~> 0.0.3"
 gem "bcrypt-ruby", "~> 2.1.2", :require => "bcrypt"
